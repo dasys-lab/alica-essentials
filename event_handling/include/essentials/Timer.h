@@ -29,7 +29,7 @@ public:
     const long getInterval() const;
     void run(bool notifyAll = true);
 
-private:
+  private:
     std::thread* runThread;
     std::chrono::milliseconds msInterval;     /** < The time between two fired events */
     std::chrono::milliseconds msDelayedStart; /** < The time between starting the TimerEvent and the first fired event */

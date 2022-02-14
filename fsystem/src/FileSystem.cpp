@@ -1,4 +1,4 @@
-#include "FileSystem.h"
+#include "essentials/FileSystem.h"
 #include <cstring>
 #include <dirent.h>
 #include <fstream>
@@ -19,10 +19,54 @@ FileSystem::FileSystem() {}
 FileSystem::~FileSystem() {}
 
 /**
- * Helpfull method to get the location of the currently executed executable.
+ * Helpful method to get the location of the currently executed executable.
  * @return The path to the running executable.
  */
 std::string FileSystem::getSelfPath()
+{
+    int size = 100;
+    char* buff = NULL;
+    buff = (char*) malloc(size);
+    std::string retString;
+
+    while (1) {
+        buff = (char*) realloc(buff, size);
+        ssize_t len = ::readlink("/proc/self/exe", buff, size);
+
+        if (len < 0) {
+            free(buff);
+            return NULL;
+        }
+
+        if (len == size) {
+            size *= 2;
+        } else {
+            buff[len] = '\0';
+            retString = std::string(buff);
+            free(buff);
+            return retString.substr(0, retString.find_last_of(PATH_SEPARATOR));
+        }
+    }
+}
+
+/**
+ * Helpful method to get currently executed executable NOT including its path.
+ * @return The path to the running executable.
+ */
+std::string FileSystem::getSelfExeName()
+{
+    std::string ret;
+    std::ifstream ifs("/proc/self/comm");
+    ifs >> ret;
+
+    return ret;
+}
+
+/**
+ * Helpfull method to get currently executed executable including its path.
+ * @return The path to the running executable.
+ */
+std::string FileSystem::getSelf()
 {
     int size = 100;
     char* buff = NULL;
@@ -46,29 +90,6 @@ std::string FileSystem::getSelfPath()
             return retString;
         }
     }
-    return NULL;
-}
-
-/**
- * Helpfull method to get currently executed executable NOT including its path.
- * @return The path to the running executable.
- */
-std::string FileSystem::getSelfExeName()
-{
-    std::string ret;
-    std::ifstream ifs("/proc/self/comm");
-    ifs >> ret;
-
-    return ret;
-}
-
-/**
- * Helpfull method to get currently executed executable including its path.
- * @return The path to the running executable.
- */
-std::string FileSystem::getSelf()
-{
-    return getSelfPath();
 }
 
 bool FileSystem::findFile(const std::string& path, const std::string& file, std::string& path_found)
@@ -265,15 +286,6 @@ bool FileSystem::endsWith(const std::string& file, const std::string& ending)
 bool FileSystem::endsWith(const std::string& file, const char ending)
 {
     return !file.empty() && (file[file.length() - 1] == ending);
-}
-
-bool FileSystem::endsWith(const std::string& file, const char ending)
-{
-    if (!file.empty() && (file[file.length() - 1] == ending)) {
-        return true;
-    } else {
-        return false;
-    }
 }
 
 /**

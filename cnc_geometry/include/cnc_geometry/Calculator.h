@@ -287,8 +287,8 @@ template <class T>
 typename std::enable_if<std::is_base_of<CNPointTemplate<T>, T>::value, bool>::type outsideTriangle(
         const T& a, const T& b, const T& c, double tolerance, const vector<T>& points)
 {
-    auto a2b = b - a;
-    auto b2c = c - b;
+auto a2b = b - a;
+auto b2c = c - b;
     auto c2a = a - c;
 
     for (int i = 0; i < points.size(); i++) {

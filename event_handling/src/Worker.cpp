@@ -12,7 +12,6 @@ Worker::Worker(std::string name)
         , started(true)
         , runCV()
 {
-    this->running = false;
     this->timer = new essentials::Timer(0, 0);
     this->timer->registerCV(&this->runCV);
     this->runThread = new std::thread(&Worker::runInternal, this);
@@ -36,6 +35,10 @@ bool Worker::stop()
 bool Worker::start()
 {
     return this->timer->start();
+}
+
+bool Worker::isRunning() const {
+    return this->timer->isRunning();
 }
 
 void Worker::setIntervalMS(std::chrono::milliseconds intervalMS)

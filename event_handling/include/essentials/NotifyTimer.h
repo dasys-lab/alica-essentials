@@ -29,7 +29,7 @@ public:
     void run(bool notifyAll = false);
     void registerCV(std::condition_variable* condVar);
 
-private:
+  private:
     std::thread* runThread;
     std::chrono::milliseconds msInterval; /** < The time between two fired events */
     bool running, started;

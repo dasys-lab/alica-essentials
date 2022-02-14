@@ -13,7 +13,7 @@ class CNVecEgo : public CNVecTemplate<CNVecEgo>
 {
 public:
     CNVecEgo()
-            : CNVecEgo(0, 0, 0){};
+        : CNVecEgo(0, 0, 0){};
     CNVecEgo(double x, double y, double z = 0);
     CNVecEgo(const CNVecEgo& obj);
     virtual ~CNVecEgo();
